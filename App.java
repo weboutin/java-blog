@@ -9,15 +9,23 @@ class App {
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
+
+        String dbhost = "127.0.0.1";
+        String dbname = "blog";
+        String dbuser = "root";
+        String dbpwd = "root";
+        String sql = "select * from user";
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/blog?" + "user=root&password=root");
+            conn = DriverManager.getConnection(
+                    "jdbc:mysql://" + dbhost + "/" + dbname + "?" + "user=" + dbuser + "&password=" + dbpwd + "");
             stmt = conn.createStatement();
-            if (stmt.execute("SELECT userid FROM user")) {
+            if (stmt.execute(sql)) {
                 rs = stmt.getResultSet();
                 while (rs.next()) {
-                    int userId = rs.getInt("userid");
-                    System.out.print("userId: " + userId);
+                    int userId = rs.getInt("user_id");
+                    System.out.println("userId: " + userId);
                 }
             }
         } catch (SQLException ex) {

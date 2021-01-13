@@ -4,7 +4,7 @@
   <display-name>Archetype Created Web Application</display-name>
   <servlet>
     <servlet-name>Users</servlet-name>
-    <servlet-class>Users</servlet-class>
+    <servlet-class>servlets.Users</servlet-class>
   </servlet>
 
   <servlet-mapping>

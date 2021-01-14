@@ -6,9 +6,33 @@
     <servlet-name>Users</servlet-name>
     <servlet-class>servlets.Users</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>Articles</servlet-name>
+    <servlet-class>servlets.Articles</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>Sessions</servlet-name>
+    <servlet-class>servlets.Sessions</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>Images</servlet-name>
+    <servlet-class>servlets.Images</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>Users</servlet-name>
-    <url-pattern>/users/*</url-pattern>
+    <url-pattern>/v1/users/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Articles</servlet-name>
+    <url-pattern>/v1/articles/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Sessions</servlet-name>
+    <url-pattern>/v1/sessions/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Images</servlet-name>
+    <url-pattern>/v1/images/*</url-pattern>
   </servlet-mapping>
 </web-app>

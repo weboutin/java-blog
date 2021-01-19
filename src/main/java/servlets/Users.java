@@ -20,8 +20,8 @@ public class Users extends HttpServlet {
             System.out.println(input);
             String account = input.optString("account");
             String password = input.optString("password");
-            System.err.println(account);
-            System.err.println(password);
+            System.out.println(account);
+            System.out.println(password);
             
             JSONObject data = new JSONObject();
             Utils.buildResponse(response, 0, "注册成功", data);

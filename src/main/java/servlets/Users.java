@@ -32,6 +32,7 @@ public class Users extends HttpServlet {
             if (e.getMessage().equals("user already exist")) {
                 Utils.buildResponse(response, -1, "用户已存在", data);
             } else {
+                e.printStackTrace();
                 Utils.buildResponse(response, -1, "系统异常", data);
             }
         }

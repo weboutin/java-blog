@@ -30,7 +30,7 @@ public class Users extends HttpServlet {
         } catch (Exception e) {
             JSONObject data = new JSONObject();
             if (e.getMessage().equals("user already exist")) {
-                Utils.buildResponse(response, -1, "用户已存在", data);
+                Utils.buildResponse(response, 2, "用户已存在", data);
             } else {
                 e.printStackTrace();
                 Utils.buildResponse(response, -1, "系统异常", data);

@@ -35,8 +35,6 @@ public class Images extends HttpServlet {
             e.printStackTrace();
         }
         
-
-
         response.setContentType("application/json;charset=UTF-8");
         JSONObject output = new JSONObject();
         JSONObject data = new JSONObject();
@@ -48,15 +46,18 @@ public class Images extends HttpServlet {
         out.println(output);
     }
 
+    /**
+     * GET /v1/images/${iamgeName}
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
         String[] pathParts = pathInfo.split("/");
         String imageName = pathParts[1];
         response.setContentType("image/png");
         InputStream fielStream = new FileInputStream(new File("/Users/itgo/Documents/java/apache-tomcat-9.0.41/webapps/sbs-impl/src/main/resources/"+imageName));
-        int size = fielStream.available(); //得到文件大小   
+        int size = fielStream.available();
         byte data[] = new byte[size];   
-        fielStream.read(data);  //读数据   
+        fielStream.read(data);
         fielStream.close();
         OutputStream os = response.getOutputStream();  
         os.write(data);  

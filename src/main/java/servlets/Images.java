@@ -20,17 +20,8 @@ public class Images extends HttpServlet {
         try {
             // Create a factory for disk-based file items
             DiskFileItemFactory factory = new DiskFileItemFactory();
-
-            // Configure a repository (to ensure a secure temp location is used)
-            // ServletContext servletContext = this.getServletConfig().getServletContext();
-            // File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
-            // factory.setRepository(repository);
-            // factory.setRepository();
-
-            // Create a new file uploa`d handler
             ServletFileUpload upload = new ServletFileUpload(factory);
 
-            // Parse the request
             List<FileItem> items = upload.parseRequest(request);
             for(FileItem item : items){
                 if(!item.isFormField()){
@@ -58,8 +49,11 @@ public class Images extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String pathInfo = request.getPathInfo();
+        String[] pathParts = pathInfo.split("/");
+        String imageName = pathParts[1];
         response.setContentType("image/png");
-        InputStream fielStream = new FileInputStream(new File("/Users/itgo/Documents/java/apache-tomcat-9.0.41/webapps/sbs-impl/src/main/resources/test.png"));
+        InputStream fielStream = new FileInputStream(new File("/Users/itgo/Documents/java/apache-tomcat-9.0.41/webapps/sbs-impl/src/main/resources/"+imageName));
         int size = fielStream.available(); //得到文件大小   
         byte data[] = new byte[size];   
         fielStream.read(data);  //读数据   

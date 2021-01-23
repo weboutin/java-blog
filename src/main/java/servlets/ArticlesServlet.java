@@ -9,10 +9,11 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
+import org.json.JSONArray;
 import org.json.JSONException;
 import services.ArticlesService;
 import utils.Utils;
-
+import entitys.Article;
 
 public class ArticlesServlet extends HttpServlet {
     /**
@@ -52,13 +53,21 @@ public class ArticlesServlet extends HttpServlet {
         try {
             String page = request.getParameter("page");
             String size = request.getParameter("size");
-            JSONObject session = Utils.parseSessionCookie(request.getCookies());
 
-            ArticlesService.getAll();
+            List<Article> articles = ArticlesService.getAll();
+
+            JSONArray jArr = new JSONArray();
+            for (int i = 0; i < articles.size(); i++) {
+                JSONObject jArticle = new JSONObject();
+                jArticle.put("title", articles.get(i).title);
+                jArticle.put("content", articles.get(i).content);
+                jArticle.put("createdAt", articles.get(i).createdAt);
+                jArticle.put("modifiedAt", articles.get(i).modifiedAt);
+                jArr.put(jArticle);
+            }
 
             JSONObject data = new JSONObject();
-            List articles = new ArrayList();
-            data.put("articles", articles);
+            data.put("articles", jArr);
             Utils.buildResponse(response, 0, "获取成功", data);
         } catch (JSONException e) {
             JSONObject data = new JSONObject();

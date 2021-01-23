@@ -4,19 +4,19 @@
   <display-name>Archetype Created Web Application</display-name>
   <servlet>
     <servlet-name>Users</servlet-name>
-    <servlet-class>servlets.Users</servlet-class>
+    <servlet-class>servlets.UsersServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>Articles</servlet-name>
-    <servlet-class>servlets.Articles</servlet-class>
+    <servlet-class>servlets.ArticlesServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>Sessions</servlet-name>
-    <servlet-class>servlets.Sessions</servlet-class>
+    <servlet-class>servlets.SessionsServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>Images</servlet-name>
-    <servlet-class>servlets.Images</servlet-class>
+    <servlet-class>servlets.ImagesServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>

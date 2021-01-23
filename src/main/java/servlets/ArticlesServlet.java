@@ -14,7 +14,7 @@ import services.ArticlesService;
 import utils.Utils;
 
 
-public class Articles extends HttpServlet {
+public class ArticlesServlet extends HttpServlet {
     /**
      * POST /v1/articles
      */
@@ -53,7 +53,9 @@ public class Articles extends HttpServlet {
             String page = request.getParameter("page");
             String size = request.getParameter("size");
             JSONObject session = Utils.parseSessionCookie(request.getCookies());
-            
+
+            ArticlesService.getAll();
+
             JSONObject data = new JSONObject();
             List articles = new ArrayList();
             data.put("articles", articles);

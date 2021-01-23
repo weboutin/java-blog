@@ -12,7 +12,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.FileItem;
 
-public class Images extends HttpServlet {
+public class ImagesServlet extends HttpServlet {
     /**
      * POST /v1/images
      */

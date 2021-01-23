@@ -9,7 +9,7 @@ import org.json.JSONException;
 import utils.Utils;
 import services.UsersService;
 
-public class Users extends HttpServlet {
+public class UsersServlet extends HttpServlet {
     /**
      * POST /v1/users
      */

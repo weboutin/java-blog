@@ -10,7 +10,7 @@ import utils.Utils;
 import services.SessionsService;
 
 
-public class Sessions extends HttpServlet {
+public class SessionsServlet extends HttpServlet {
     /**
      * POST /v1/sessions
      */

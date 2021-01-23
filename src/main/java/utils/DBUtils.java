@@ -11,11 +11,11 @@ public class DBUtils {
         String dbhost = "127.0.0.1";
         String dbname = "sbs-impl";
         String dbuser = "root";
-        String dbpwd = "1234qwer";
+        String dbpwd = "root";
         if (conn == null) {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(
-                    "jdbc:mysql://" + dbhost + "/" + dbname + "?" + "user=" + dbuser + "&password=" + dbpwd + "");
+                    "jdbc:mysql://" + dbhost + "/" + dbname + "?" + "user=" + dbuser + "&password=" + dbpwd  + "&useUnicode=true&characterEncoding=utf-8");
         }
         return conn;
     }

@@ -4,8 +4,8 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.lang.NumberFormatException;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
@@ -51,11 +51,13 @@ public class ArticlesServlet extends HttpServlet {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            String page = request.getParameter("page");
-            String size = request.getParameter("size");
-
-            List<Article> articles = ArticlesService.getAll();
-
+            String pageArg = request.getParameter("page");
+            int page = 0;
+            int size = 10;
+            if (pageArg != null) {
+                page = Integer.parseInt(pageArg);
+            }
+            List<Article> articles = ArticlesService.getAll(page, size);
             JSONArray jArr = new JSONArray();
             for (int i = 0; i < articles.size(); i++) {
                 JSONObject jArticle = new JSONObject();
@@ -69,6 +71,9 @@ public class ArticlesServlet extends HttpServlet {
             JSONObject data = new JSONObject();
             data.put("articles", jArr);
             Utils.buildResponse(response, 0, "获取成功", data);
+        } catch (NumberFormatException e){
+            JSONObject data = new JSONObject();
+            Utils.buildResponse(response, 1, "参数异常", data);
         } catch (JSONException e) {
             JSONObject data = new JSONObject();
             Utils.buildResponse(response, 1, "参数异常", data);

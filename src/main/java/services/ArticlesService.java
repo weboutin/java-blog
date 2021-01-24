@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.TitlePaneLayout;
-
 public class ArticlesService {
 
     public static Integer create(Integer userId, String title, String content) throws Exception {
@@ -43,12 +41,14 @@ public class ArticlesService {
         return articleId;
     }
 
-    public static List<Article> getAll() throws Exception {
+    public static List<Article> getAll(int page, int size) throws Exception {
         Connection conn = DBUtils.connect();
         List<Article> articles = new ArrayList<>();
         try {
-            String sql = "select * from `sbs-articles`";
+            String sql = "select * from `sbs-articles` limit ?,?";
             PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, page);
+            ps.setInt(2, size);
             ResultSet rs = null;
             if (ps.execute()) {
                 rs = ps.getResultSet();

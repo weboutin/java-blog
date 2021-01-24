@@ -125,4 +125,21 @@ public class ArticlesService {
             throw e;
         }
     }
+
+    public static void remove(Integer userId, Integer articleId) throws Exception {
+        Connection conn = DBUtils.connect();
+        try {
+            String sql = "delete from `sbs-articles` where user_id=? and id=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ps.setInt(2, articleId);
+            int effectRow = ps.executeUpdate();
+            ps.close();
+            if (effectRow == 0) {
+                throw new Exception("Remove error");
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+    }
 }

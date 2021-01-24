@@ -144,8 +144,49 @@ public class ArticlesServlet extends HttpServlet {
             }
             if (e.getMessage().equals("Access Denied")) {
                 Utils.buildResponse(response, -1, "无访问权限", data);
-            } else if (e.getMessage().equals("update error")) {
+            } else if (e.getMessage().equals("Update error")) {
                 Utils.buildResponse(response, -1, "更新失败", data);
+            } else if (e.getMessage().equals("Cookie parse error")) {
+                Utils.buildResponse(response, -1, "无访问权限", data);
+            } else {
+                e.printStackTrace();
+                Utils.buildResponse(response, -1, "系统异常", data);
+            }
+        }
+    }
+
+    /**
+     * DELETE /v1/articles/:articleId
+     */
+    public void doDelete(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String pathInfo = request.getPathInfo();
+            Integer articleId = null;
+            String[] pathParts = pathInfo.split("/");
+            articleId = Integer.parseInt(pathParts[1]);
+
+            JSONObject session = Utils.parseSessionCookie(request.getCookies());
+            Integer userId = session.optInt("userId");
+            ArticlesService.remove(userId, articleId);
+            JSONObject data = new JSONObject();
+            Utils.buildResponse(response, 0, "删除成功", data);
+        } catch (NumberFormatException e) {
+            JSONObject data = new JSONObject();
+            Utils.buildResponse(response, 1, "参数异常", data);
+        } catch (JSONException e) {
+            JSONObject data = new JSONObject();
+            Utils.buildResponse(response, 1, "参数异常", data);
+        } catch (Exception e) {
+            JSONObject data = new JSONObject();
+            if (e.getMessage() == null) {
+                e.printStackTrace();
+                Utils.buildResponse(response, -1, "系统异常", data);
+            }
+            if (e.getMessage().equals("Access Denied")) {
+                Utils.buildResponse(response, -1, "无访问权限", data);
+            } else if (e.getMessage().equals("Remove error")) {
+                Utils.buildResponse(response, -1, "删除失败", data);
             } else if (e.getMessage().equals("Cookie parse error")) {
                 Utils.buildResponse(response, -1, "无访问权限", data);
             } else {

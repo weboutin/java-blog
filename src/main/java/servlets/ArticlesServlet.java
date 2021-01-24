@@ -47,31 +47,51 @@ public class ArticlesServlet extends HttpServlet {
     }
 
     /**
-     * GET /v1/articles?page=?&size=?
+     * GET /v1/articles?page=?
+     * 
+     * GET /v1/articles/:articleId
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            String pageArg = request.getParameter("page");
-            int page = 0;
-            int size = 10;
-            if (pageArg != null) {
-                page = Integer.parseInt(pageArg);
+            String pathInfo = request.getPathInfo();
+            Integer articleId = null;
+            if (pathInfo != null) {
+                String[] pathParts = pathInfo.split("/");
+                articleId = Integer.parseInt(pathParts[1]);
             }
-            List<Article> articles = ArticlesService.getAll(page, size);
-            JSONArray jArr = new JSONArray();
-            for (int i = 0; i < articles.size(); i++) {
-                JSONObject jArticle = new JSONObject();
-                jArticle.put("title", articles.get(i).title);
-                jArticle.put("content", articles.get(i).content);
-                jArticle.put("createdAt", articles.get(i).createdAt);
-                jArticle.put("modifiedAt", articles.get(i).modifiedAt);
-                jArr.put(jArticle);
+            if (articleId == null) {
+                String pageArg = request.getParameter("page");
+                int page = 0;
+                int size = 10;
+                if (pageArg != null) {
+                    page = Integer.parseInt(pageArg);
+                }
+                List<Article> articles = ArticlesService.getAll(page, size);
+                JSONArray jArr = new JSONArray();
+                for (int i = 0; i < articles.size(); i++) {
+                    JSONObject jArticle = new JSONObject();
+                    jArticle.put("articleId", articles.get(i).articleId);
+                    jArticle.put("title", articles.get(i).title);
+                    jArticle.put("content", articles.get(i).content);
+                    jArticle.put("createdAt", articles.get(i).createdAt);
+                    jArticle.put("modifiedAt", articles.get(i).modifiedAt);
+                    jArr.put(jArticle);
+                }
+                JSONObject data = new JSONObject();
+                data.put("articles", jArr);
+                Utils.buildResponse(response, 0, "获取成功", data);
+            } else {
+                Article article = ArticlesService.getDetail(articleId);
+                JSONObject data = new JSONObject();
+                data.put("articleId", article.articleId);
+                data.put("title", article.title);
+                data.put("content", article.content);
+                data.put("createdAt", article.createdAt);
+                data.put("modifiedAt", article.modifiedAt);
+                Utils.buildResponse(response, 0, "获取成功", data);
             }
 
-            JSONObject data = new JSONObject();
-            data.put("articles", jArr);
-            Utils.buildResponse(response, 0, "获取成功", data);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             JSONObject data = new JSONObject();
             Utils.buildResponse(response, 1, "参数异常", data);
         } catch (JSONException e) {
@@ -79,6 +99,9 @@ public class ArticlesServlet extends HttpServlet {
             Utils.buildResponse(response, 1, "参数异常", data);
         } catch (Exception e) {
             JSONObject data = new JSONObject();
+            if (e.getMessage() == null) {
+                Utils.buildResponse(response, -1, "系统异常", data);
+            }
             if (e.getMessage().equals("Access Denied")) {
                 Utils.buildResponse(response, -1, "无访问权限", data);
             } else {

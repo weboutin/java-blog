@@ -54,10 +54,12 @@ public class ArticlesService {
                 rs = ps.getResultSet();
                 while (rs.next()) {
                     Article article = new Article();
+                    Integer articleId = rs.getInt("id");
                     String title = rs.getString("title");
                     String content = rs.getString("content");
                     Long createdAt = rs.getLong("created_at");
                     Long modifiedAt = rs.getLong("modified_at");
+                    article.articleId = articleId;
                     article.title = title;
                     article.content = content;
                     article.createdAt = createdAt;
@@ -73,4 +75,35 @@ public class ArticlesService {
         return articles;
     }
 
+    public static Article getDetail(int articleId) throws Exception {
+        Connection conn = DBUtils.connect();
+        Article article = new Article();
+        try {
+            String sql = "select * from `sbs-articles` where id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, articleId);
+            ResultSet rs = null;
+            if (ps.execute()) {
+                rs = ps.getResultSet();
+                if (rs.next()) {
+                    String title = rs.getString("title");
+                    String content = rs.getString("content");
+                    Long createdAt = rs.getLong("created_at");
+                    Long modifiedAt = rs.getLong("modified_at");
+                    article.articleId = articleId;
+                    article.title = title;
+                    article.content = content;
+                    article.createdAt = createdAt;
+                    article.modifiedAt = modifiedAt;
+                } else {
+                    article = null;
+                }
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            throw e;
+        }
+        return article;
+    }
 }

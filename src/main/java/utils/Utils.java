@@ -8,7 +8,8 @@ import java.io.*;
 public class Utils {
     final static String secretKey = "sbs-impl-cookie-secret-key";
 
-    public static void buildResponse(HttpServletResponse response, Integer code, String msg, JSONObject data) throws IOException{
+    public static void buildResponse(HttpServletResponse response, Integer code, String msg, JSONObject data)
+            throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         JSONObject output = new JSONObject();
         output.put("code", code);
@@ -18,15 +19,18 @@ public class Utils {
     }
 
     public static String createAndSetSessionCookie(HttpServletResponse response, JSONObject data) {
-	    String originalString = data.toString();
-        String encryptedString = AES.encrypt(originalString, secretKey) ;
-        Cookie  mycookie = new Cookie("session-id", encryptedString);
+        String originalString = data.toString();
+        String encryptedString = AES.encrypt(originalString, secretKey);
+        Cookie mycookie = new Cookie("session-id", encryptedString);
         response.addCookie(mycookie);
         return encryptedString;
     }
 
-    public static JSONObject parseSessionCookie(Cookie[] cookies) throws Exception{
+    public static JSONObject parseSessionCookie(Cookie[] cookies) throws Exception {
         String sessionCookieStr = null;
+        if (cookies == null) {
+            throw new Exception("Access Denied");
+        }
         for (int i = 0; i < cookies.length; i++) {
             String name = cookies[i].getName();
             String value = cookies[i].getValue();
@@ -37,8 +41,17 @@ public class Utils {
         if (sessionCookieStr == null) {
             throw new Exception("Access Denied");
         }
-        String decryptedString = AES.decrypt(sessionCookieStr, secretKey) ;
-        return new JSONObject(decryptedString);
+
+        String decryptedString = null;
+
+        JSONObject result = null;
+        try {
+            decryptedString = AES.decrypt(sessionCookieStr, secretKey);
+            result = new JSONObject(decryptedString);
+        } catch (Exception e) {
+            throw new Exception("Cookie parse error");
+        }
+        return result;
     }
 
 }

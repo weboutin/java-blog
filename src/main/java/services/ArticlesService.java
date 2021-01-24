@@ -4,10 +4,8 @@ import utils.DBUtils;
 import entitys.Article;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -105,5 +103,26 @@ public class ArticlesService {
             throw e;
         }
         return article;
+    }
+
+    public static void edit(Integer userId, Integer articleId, String title, String content) throws Exception {
+        Connection conn = DBUtils.connect();
+        try {
+            String sql = "update `sbs-articles` set title=?, content=?,modified_at=? where id = ? and user_id=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, title);
+            ps.setString(2, content);
+            Date date = new Date();
+            ps.setLong(3, date.getTime());
+            ps.setInt(4, articleId);
+            ps.setInt(5, userId);
+            int effectRow = ps.executeUpdate();
+            ps.close();
+            if (effectRow == 0) {
+                throw new Exception("update error");
+            }
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }

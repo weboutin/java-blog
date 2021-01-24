@@ -110,4 +110,48 @@ public class ArticlesServlet extends HttpServlet {
             }
         }
     }
+
+    /**
+     * PUT /v1/articles/:articleId
+     */
+    public void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            String pathInfo = request.getPathInfo();
+            Integer articleId = null;
+            String[] pathParts = pathInfo.split("/");
+            articleId = Integer.parseInt(pathParts[1]);
+            String json = IOUtils.toString(request.getInputStream(), "utf8");
+            JSONObject input = new JSONObject(json);
+            String title = input.optString("title");
+            String content = input.optString("content");
+            JSONObject data = new JSONObject();
+            JSONObject session = Utils.parseSessionCookie(request.getCookies());
+            Integer userId = session.optInt("userId");
+            ArticlesService.edit(userId, articleId, title, content);
+            Utils.buildResponse(response, 0, "更新成功", data);
+
+        } catch (NumberFormatException e) {
+            JSONObject data = new JSONObject();
+            Utils.buildResponse(response, 1, "参数异常", data);
+        } catch (JSONException e) {
+            JSONObject data = new JSONObject();
+            Utils.buildResponse(response, 1, "参数异常", data);
+        } catch (Exception e) {
+            JSONObject data = new JSONObject();
+            if (e.getMessage() == null) {
+                e.printStackTrace();
+                Utils.buildResponse(response, -1, "系统异常", data);
+            }
+            if (e.getMessage().equals("Access Denied")) {
+                Utils.buildResponse(response, -1, "无访问权限", data);
+            } else if (e.getMessage().equals("update error")) {
+                Utils.buildResponse(response, -1, "更新失败", data);
+            } else if (e.getMessage().equals("Cookie parse error")) {
+                Utils.buildResponse(response, -1, "无访问权限", data);
+            } else {
+                e.printStackTrace();
+                Utils.buildResponse(response, -1, "系统异常", data);
+            }
+        }
+    }
 }

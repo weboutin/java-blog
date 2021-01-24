@@ -44,7 +44,6 @@ public class UsersService {
             rs = ps.getGeneratedKeys();
             while (rs.next()) {
                 userId = rs.getInt(1);
-                System.out.println("userId: " + userId);
                 return userId;
             }
             rs.close();

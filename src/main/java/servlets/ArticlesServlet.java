@@ -37,6 +37,10 @@ public class ArticlesServlet extends HttpServlet {
             Utils.buildResponse(response, 1, "参数异常", data);
         } catch (Exception e) {
             JSONObject data = new JSONObject();
+            if (e.getMessage() == null) {
+                e.printStackTrace();
+                Utils.buildResponse(response, -1, "系统异常", data);
+            }
             if (e.getMessage().equals("Access Denied")) {
                 Utils.buildResponse(response, -1, "无访问权限", data);
             } else {

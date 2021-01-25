@@ -34,6 +34,10 @@ public class SessionsServlet extends HttpServlet {
             Utils.buildResponse(response, 1, "参数异常", data);
         } catch (Exception e) {
             JSONObject data = new JSONObject();
+            if (e.getMessage() == null) {
+                e.printStackTrace();
+                Utils.buildResponse(response, -1, "系统异常", data);
+            }
             if (e.getMessage().equals("user not exist")) {
                 Utils.buildResponse(response, 2, "账号或密码异常", data);
             } else if (e.getMessage().equals("password error")) {

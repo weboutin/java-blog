@@ -15,11 +15,14 @@ public class SessionsService {
         Connection conn = DBUtils.connect();
         Integer userId = null;
         String realPassword = null;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
         try {
             String sql = "select id,password from `sbs-users` where account = ?";
-            PreparedStatement ps = conn.prepareStatement(sql);
+            ps = conn.prepareStatement(sql);
             ps.setString(1, account);
-            ResultSet rs = null;
             if (ps.execute()) {
                 rs = ps.getResultSet();
                 while (rs.next()) {
@@ -27,11 +30,13 @@ public class SessionsService {
                     realPassword = rs.getString("password");
                 }
             }
-            rs.close();
-            ps.close();    
         } catch (Exception e) {
             throw e;
+        } finally {
+            rs.close();
+            ps.close();    
         }
+
         if (userId == null) {
             throw new Exception("user not exist");
         }

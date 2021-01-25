@@ -29,6 +29,10 @@ public class UsersServlet extends HttpServlet {
             Utils.buildResponse(response, 1, "参数异常", data);
         } catch (Exception e) {
             JSONObject data = new JSONObject();
+            if (e.getMessage() == null) {
+                e.printStackTrace();
+                Utils.buildResponse(response, -1, "系统异常", data);
+            }
             if (e.getMessage().equals("user already exist")) {
                 Utils.buildResponse(response, 2, "用户已存在", data);
             } else {

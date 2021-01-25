@@ -26,7 +26,7 @@ public class UsersService {
             psQuery = conn.prepareStatement(sql);
             psQuery.setString(1, account);
             if (psQuery.execute()) {
-                rsUpdate = psQuery.getResultSet();
+                rsQuery = psQuery.getResultSet();
                 while (rsQuery.next()) {
                     throw new Exception("user already exist");
                 }

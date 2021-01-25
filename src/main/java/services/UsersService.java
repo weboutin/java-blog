@@ -8,10 +8,12 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Date;
+import utils.MyBatisUtils;
 
 public class UsersService {
 
     public static Integer register(String account, String password) throws Exception {
+        new MyBatisUtils();
         Connection conn = DBUtils.connect();
         Integer userId = null;
 

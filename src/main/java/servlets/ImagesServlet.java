@@ -49,19 +49,27 @@ public class ImagesServlet extends HttpServlet {
      * GET /v1/images/${iamgeName}
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String pathInfo = request.getPathInfo();
-        String[] pathParts = pathInfo.split("/");
-        String imageName = pathParts[1];
-        response.setContentType("image/png");
-        InputStream fielStream = new FileInputStream(new File("/Users/itgo/Documents/java/apache-tomcat-9.0.41/webapps/sbs-impl/src/main/resources/"+imageName));
-        int size = fielStream.available();
-        byte data[] = new byte[size];   
-        fielStream.read(data);
-        fielStream.close();
-        OutputStream os = response.getOutputStream();  
-        os.write(data);  
-        os.flush();  
-        os.close();          
+        try {
+            String pathInfo = request.getPathInfo();
+            String[] pathParts = pathInfo.split("/");
+            String imageName = pathParts[1];
+            response.setContentType("image/png");
+            // InputStream fielStream = new FileInputStream(new File("/Users/itgo/Documents/java/apache-tomcat-9.0.41/webapps/sbs-impl/src/main/resources/uploads/"+imageName));
+            InputStream fielStream = getClass().getResourceAsStream("uploads/test.png");;
+            int size = fielStream.available();
+            byte data[] = new byte[size];   
+            fielStream.read(data);
+            fielStream.close();
+            OutputStream os = response.getOutputStream();  
+            os.write(data);  
+            os.flush();  
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JSONObject data = new JSONObject();
+            Utils.buildResponse(response, -1, "系统异常", data);
+        } 
+                  
     }
     
 }

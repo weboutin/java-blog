@@ -18,7 +18,17 @@ public class MyBatisUtils {
             InputStream inputStream = Resources.getResourceAsStream(resource);
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
         }
-        SqlSession session = sqlSessionFactory.openSession();
+        SqlSession session = sqlSessionFactory.openSession(true);
+        return session;
+    }
+
+    public static SqlSession getSqlSession(boolean autoCommit) throws Exception {
+        if (sqlSessionFactory == null) {
+            String resource = "mybatis/mybatis-config.xml";
+            InputStream inputStream = Resources.getResourceAsStream(resource);
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+        }
+        SqlSession session = sqlSessionFactory.openSession(autoCommit);
         return session;
     }
 }

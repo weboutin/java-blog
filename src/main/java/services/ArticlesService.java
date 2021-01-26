@@ -19,8 +19,14 @@ public class ArticlesService {
         SqlSession session = MyBatisUtils.getSqlSession();
         ArticleMapper mapper = session.getMapper(ArticleMapper.class);
         Date date = new Date();
-        int articleId = mapper.insertArticle(userId, title, content, date.getTime(), date.getTime());
-        return articleId;
+        Article article = new Article();
+        article.userId = userId;
+        article.title = title;
+        article.content = content;
+        article.createdAt = date.getTime();
+        article.modifiedAt = date.getTime();
+        mapper.insertArticle(article);
+        return article.articleId;
     }
 
     public static List<Article> getAll(int page, int size) throws Exception {
@@ -33,7 +39,7 @@ public class ArticlesService {
     public static Article getDetail(int articleId) throws Exception {
         SqlSession session = MyBatisUtils.getSqlSession();
         ArticleMapper mapper = session.getMapper(ArticleMapper.class);
-        Article article =  mapper.getArticleById(articleId);
+        Article article = mapper.getArticleById(articleId);
         return article;
     }
 
@@ -41,32 +47,27 @@ public class ArticlesService {
         SqlSession session = MyBatisUtils.getSqlSession();
         ArticleMapper mapper = session.getMapper(ArticleMapper.class);
         Date date = new Date();
-        Integer effectRow = mapper.updateArticle(userId, articleId, title, content, date.getTime());
-        System.out.println(effectRow);
+        Article article = new Article();
+        article.articleId = articleId;
+        article.userId = userId;
+        article.title = title;
+        article.content = content;
+        article.modifiedAt = date.getTime();
+        Integer effectRow = mapper.updateArticle(article);
         if (effectRow == 0) {
-            throw new Exception("Remove error");
+            throw new Exception("Update error");
         }
-
     }
 
     public static void remove(Integer userId, Integer articleId) throws Exception {
-        Connection conn = DBUtils.connect();
-
-        PreparedStatement ps = null;
-
-        try {
-            String sql = "delete from `sbs-articles` where user_id=? and id=?";
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, userId);
-            ps.setInt(2, articleId);
-            int effectRow = ps.executeUpdate();
-            if (effectRow == 0) {
-                throw new Exception("Remove error");
-            }
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            ps.close();
+        SqlSession session = MyBatisUtils.getSqlSession();
+        ArticleMapper mapper = session.getMapper(ArticleMapper.class);
+        Article article = new Article();
+        article.userId = userId;
+        article.articleId = articleId;
+        Integer effectRow = mapper.removeArticleById(article);
+        if (effectRow == 0) {
+            throw new Exception("Remove error");
         }
     }
 }

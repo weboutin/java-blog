@@ -87,11 +87,13 @@ public class ArticlesServlet extends HttpServlet {
             } else {
                 Article article = ArticlesService.getDetail(articleId);
                 JSONObject data = new JSONObject();
-                data.put("articleId", article.articleId);
-                data.put("title", article.title);
-                data.put("content", article.content);
-                data.put("createdAt", article.createdAt);
-                data.put("modifiedAt", article.modifiedAt);
+                if (article != null) {
+                    data.put("articleId", article.articleId);
+                    data.put("title", article.title);
+                    data.put("content", article.content);
+                    data.put("createdAt", article.createdAt);
+                    data.put("modifiedAt", article.modifiedAt);
+                }
                 Utils.buildResponse(response, 0, "获取成功", data);
             }
 
@@ -102,6 +104,7 @@ public class ArticlesServlet extends HttpServlet {
             JSONObject data = new JSONObject();
             Utils.buildResponse(response, 1, "参数异常", data);
         } catch (Exception e) {
+            e.printStackTrace();
             JSONObject data = new JSONObject();
             if (e.getMessage() == null) {
                 Utils.buildResponse(response, -1, "系统异常", data);
@@ -109,7 +112,6 @@ public class ArticlesServlet extends HttpServlet {
             if (e.getMessage().equals("Access Denied")) {
                 Utils.buildResponse(response, -1, "无访问权限", data);
             } else {
-                e.printStackTrace();
                 Utils.buildResponse(response, -1, "系统异常", data);
             }
         }
@@ -183,8 +185,8 @@ public class ArticlesServlet extends HttpServlet {
             Utils.buildResponse(response, 1, "参数异常", data);
         } catch (Exception e) {
             JSONObject data = new JSONObject();
+            e.printStackTrace();
             if (e.getMessage() == null) {
-                e.printStackTrace();
                 Utils.buildResponse(response, -1, "系统异常", data);
             }
             if (e.getMessage().equals("Access Denied")) {
@@ -194,7 +196,6 @@ public class ArticlesServlet extends HttpServlet {
             } else if (e.getMessage().equals("Cookie parse error")) {
                 Utils.buildResponse(response, -1, "无访问权限", data);
             } else {
-                e.printStackTrace();
                 Utils.buildResponse(response, -1, "系统异常", data);
             }
         }

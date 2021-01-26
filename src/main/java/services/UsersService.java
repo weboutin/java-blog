@@ -25,7 +25,6 @@ public class UsersService {
         inUser.createdAt = now;
         inUser.modifiedAt = now;
         mapper.insertUser(inUser);
-        session.commit();
         return inUser.userId;
     }
 }

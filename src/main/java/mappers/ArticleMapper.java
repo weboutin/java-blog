@@ -11,15 +11,9 @@ import java.util.List;
 
 public interface ArticleMapper {
     @Insert("insert into `sbs-articles` (user_id,title,content,created_at,modified_at) "
-    + "values(#{user_id},#{title},#{content},#{created_at},#{modified_at})")
-    @Options(useGeneratedKeys = true,keyProperty = "article.articleId",keyColumn = "id")
-    Integer insertArticle(
-        @Param("user_id") Integer userId, 
-        @Param("title") String title, 
-        @Param("content") String content,
-        @Param("created_at") Long created_at, 
-        @Param("modified_at") Long modified_at
-    );
+            + "values(#{article.userId},#{article.title},#{article.content},#{article.createdAt},#{article.modifiedAt})")
+    @Options(useGeneratedKeys = true, keyProperty = "article.articleId", keyColumn = "id")
+    Integer insertArticle(@Param("article") Article article);
 
     @Select("select *,id articleId, created_at createdAt, modified_at modifiedAt from `sbs-articles` limit #{page},#{size}")
     List<Article> getArticles(@Param("page") Integer page, @Param("size") Integer size);
@@ -27,13 +21,10 @@ public interface ArticleMapper {
     @Select("select *,id articleId, created_at createdAt, modified_at modifiedAt from `sbs-articles` where id = #{articleId}")
     Article getArticleById(@Param("articleId") Integer article);
 
-    @Update("update `sbs-articles` set title=#{title}, content=#{content},modified_at=#{modified_at} where id = #{articleId} and user_id=#{userId}")
-    Integer updateArticle(
-        @Param("userId") Integer userId, 
-        @Param("articleId") Integer articleId, 
-        @Param("title") String title, 
-        @Param("content") String content,
-        @Param("modified_at") Long modified_at
-    );
+    @Update("update `sbs-articles` set title=#{article.title}, content=#{article.content},modified_at=#{article.modifiedAt} where id = #{article.articleId} and user_id=#{article.userId}")
+    @Options(useGeneratedKeys = true, keyProperty = "article.articleId", keyColumn = "id")
+    Integer updateArticle(@Param("article") Article article);
 
+    @Delete("delete from `sbs-articles` where user_id=#{article.userId} and id=#{article.articleId}")
+    Integer removeArticleById(@Param("article") Article article);
 }

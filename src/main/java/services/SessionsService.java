@@ -10,11 +10,6 @@ public class SessionsService {
 
     public static Integer auth(String account, String password) throws Exception {
         SqlSession session = MyBatisUtils.getSqlSession();
-        // User user = (User)
-        // session.selectOne("mybatis.mappers.UsersMapper.selectUserByAccount",
-        // account);
-        // BlogMapper mapper = session.getMapper(BlogMapper.class);
-        // Blog blog = mapper.selectBlog(101);
         UserMapper mapper = session.getMapper(UserMapper.class);
         User user = mapper.selectUserByAccount(account);
 

@@ -6,8 +6,4 @@ public class Article {
     public String content;
     public Long createdAt;
     public Long modifiedAt;
-
-    public Integer getArticleId() {
-        return this.articleId;
-    }
 }

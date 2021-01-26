@@ -6,7 +6,6 @@ import org.apache.ibatis.session.SqlSession;
 import entitys.User;
 import mappers.UserMapper;
 import utils.MyBatisUtils;
-import entitys.User;
 
 public class UsersService {
 
@@ -18,10 +17,15 @@ public class UsersService {
         if (user != null) {
             throw new Exception("user already exist");
         }
-        Date date = new Date(); 
+        Date date = new Date();
         Long now = date.getTime();
-        int userId = mapper.insertUser(account,password,now,now);
-        System.out.println(userId);
-        return userId;
+        User inUser = new User();
+        inUser.account = account;
+        inUser.password = password;
+        inUser.createdAt = now;
+        inUser.modifiedAt = now;
+        mapper.insertUser(inUser);
+        session.commit();
+        return inUser.userId;
     }
 }

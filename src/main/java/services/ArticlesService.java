@@ -1,12 +1,6 @@
 package services;
 
-import utils.DBUtils;
 import entitys.Article;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
